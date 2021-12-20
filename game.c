@@ -6,7 +6,7 @@
 /*   By: theophilebrulhart <theophilebrulhart@st    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/12/12 16:28:34 by theophilebr       #+#    #+#             */
-/*   Updated: 2021/12/14 00:18:20 by theophilebr      ###   ########.fr       */
+/*   Updated: 2021/12/15 19:26:58 by theophilebr      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -48,12 +48,19 @@ void display_game(t_game *game)
 			}
 			if (game->map[i][j] == RONFLEX)
 			{
-				game->x_position = j;
-				game->y_position = i;
-				game->map[i][j] = VOID;
-	 			mlx_put_image_to_window(game->mlx, game->win, game->ronflex_orientation, game->x_position * SIZE_BLOCK, game->y_position * SIZE_BLOCK);
+				if (game->ronflex_check)
+				{
+					ronflex_editor(game, i, j);
+					printf("faut géré les ronflexs editor\n");
+				}
+				else {
+					game->x_position = j;
+					game->y_position = i;
+					game->map[i][j] = VOID;
+	 				mlx_put_image_to_window(game->mlx, game->win, game->ronflex_orientation, game->x_position * SIZE_BLOCK, game->y_position * SIZE_BLOCK);
+				}
 			}
-			printf("%d", game->map[i][j]);
+			//printf("%d", game->map[i][j]);
 			if (game->map[i][j] == BOX)
 				mlx_put_image_to_window(game->mlx, game->win, game->box, j * SIZE_BLOCK, i * SIZE_BLOCK);
 			if (game->map[i][j] == WALL)
@@ -68,7 +75,7 @@ void display_game(t_game *game)
 			
 			j++;
 		}
-		printf("\n");
+		//printf("\n");
 		i++;
 	}
 }
@@ -84,14 +91,18 @@ void	start_game(t_game *game)
 	game->ronflex_right = mlx_xpm_file_to_image(game->mlx, "./sprites/charac/ronflex_right.xpm", &game->width, &game->heigth);
 	game->ronflex_up = mlx_xpm_file_to_image(game->mlx, "./sprites/charac/ronflex_up.xpm", &game->width, &game->heigth);
 	game->ronflex_orientation = game->ronflex_down;
+	game->ronflex_check = 0;
+	game->editor_check = 0;
 
+	printf("ON CHARGE LA MAP\n");
 	if (!load_map(game, "./levels/level0.lvl"))
-		exit(EXIT_FAILURE);
+			exit(EXIT_FAILURE);
+		
 	display_game(game);
 	
-	printf("(game) game.mlx = %p\n", game->mlx);
+	//printf("(game) game.mlx = %p\n", game->mlx);
 	mlx_hook(game->win, 2, 1L<<0, change_position, game);
-	printf("player position  x: %d\n", game->x_position);
-	printf("player position  y: %d\n", game->y_position);
+	// printf("player position  x: %d\n", game->x_position);
+	// printf("player position  y: %d\n", game->y_position);
 
 }

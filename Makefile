@@ -4,6 +4,8 @@ SRCS         =	main.c \
 				mlx_hook.c \
 				moove_player.c \
 				next_level.c \
+				moove_box.c \
+				editor.c \
 
 OBJS         = ${SRCS:.c=.o}
 

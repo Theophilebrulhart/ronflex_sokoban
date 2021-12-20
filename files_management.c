@@ -6,7 +6,7 @@
 /*   By: theophilebrulhart <theophilebrulhart@st    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/12/12 17:47:05 by theophilebr       #+#    #+#             */
-/*   Updated: 2021/12/14 00:14:37 by theophilebr      ###   ########.fr       */
+/*   Updated: 2021/12/15 15:30:59 by theophilebr      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,7 +27,7 @@ int	load_map(t_game *game, char *level)
 		return (0);
 	fgets(files_lign, NBR_BLOCK_WIDTH * NBR_BLOCK_HEIGTH + 1, files);
 	i = 0;
-	printf("files_lign : %s\n", files_lign);
+	//printf("files_lign : %s\n", files_lign);
 	while (i < NBR_BLOCK_HEIGTH)
 	{
 		j = 0;
@@ -50,18 +50,50 @@ int	load_map(t_game *game, char *level)
 		i++;
 	}
 	j = 0;
+	// while (j < NBR_BLOCK_HEIGTH)
+	// {
+	// 	i = 0;
+	// 	printf("ligne : ");
+	// 	while (i < NBR_BLOCK_WIDTH)
+	// 	{	
+	// 		printf("%d", game->map[j][i]);
+	// 		i++;
+	// 	}
+	// 	j++;
+	// 	printf("\n");
+	// }
+	fclose(files);
+	return (1);
+}
+
+int	create_map(t_game *game)
+{
+	printf("on crée le fichier map\n");
+	int j;
+	int i;
+	int t;
+	(void)game;
+	FILE	*files = NULL;
+	char files_lign[NBR_BLOCK_HEIGTH * NBR_BLOCK_WIDTH + 1] = {0};
+	files = fopen("./levels/level_editor.lvl", "w+");
+	if (!files)
+		return (0);
+	j = 0;
+	t = 0; 
 	while (j < NBR_BLOCK_HEIGTH)
 	{
 		i = 0;
-		printf("ligne : ");
 		while (i < NBR_BLOCK_WIDTH)
-		{	
-			printf("%d", game->map[j][i]);
+		{
+			files_lign[t] = game->map[j][i] + '0';
+			printf("%d", files_lign[t]);
 			i++;
+			t++;
 		}
 		j++;
-		printf("\n");
+		printf("LA NOUVELLE MAP : %d\n", files_lign[t]);
 	}
+	fputs(files_lign, files);
 	fclose(files);
 	return (1);
 }
